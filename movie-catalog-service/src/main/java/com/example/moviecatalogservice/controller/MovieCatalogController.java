@@ -1,5 +1,6 @@
 package com.example.moviecatalogservice.controller;
 
+import java.nio.file.ClosedWatchServiceException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,11 @@ public class MovieCatalogController {
 	
 	
 	@GetMapping("/{userId}")
-	public List<CatalogItem> getCatalog(@PathVariable("userId") String userId){
+	public List<CatalogItem> getCatalog(@PathVariable("userId") Long userId) throws IllegalAccessException{
+		
+		if(userId == 0) {
+			throw new IllegalAccessException();
+		}
 		
 		UserRatings ratings = restTemplate
 				.getForObject("http://rating-data-service/rating/user/"+userId ,UserRatings.class);
